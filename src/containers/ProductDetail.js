@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addToCartAction,
   removeSelectedProduct,
   selectedProducts,
 } from "../redux/actions/productActions";
@@ -32,6 +33,11 @@ const ProductDetail = () => {
     };
   }, [productId]);
 
+  const handleAddCart = () =>
+  {
+    dispatch(addToCartAction(product));
+  }
+
   return (
     <div className="ui grid container">
       {Object.keys(product).length === 0 ? (
@@ -55,7 +61,7 @@ const ProductDetail = () => {
                   <div className="hidden content">
                     <i className="shop icon"></i>
                   </div>
-                  <div className="visible content">Add to Cart</div>
+                  <div className="visible content" onClick={handleAddCart}>Add to Cart</div>
                 </div>
               </div>
             </div>

@@ -5,8 +5,11 @@ import axios from "axios";
 import { setProducts } from "../redux/actions/productActions";
 
 const ProductListing = () => {
-
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const fetchProducts = async () => {
     const response = await axios
@@ -17,13 +20,8 @@ const ProductListing = () => {
     dispatch(setProducts(response.data));
   };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
   return (
     <div className="ui grid">
-        <br />
       <ProductComponent />
     </div>
   );
