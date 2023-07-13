@@ -2,20 +2,20 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { withRouter } from "react-router";
 import {
   addToCartAction,
   removeSelectedProduct,
   selectedProducts,
 } from "../redux/actions/productActions";
 
-const ProductDetail = () => {
+const ProductDetail = (props) => {
   const product = useSelector((state) => state.product.singleProduct);
-  console.log(product);
+  // console.log(product);
   const { title, image, price, category, description } = product;
-  console.log(title);
+
   const dispatch = useDispatch();
   const { productId } = useParams();
-  console.log(productId);
 
   const fetchProductDetail = async () => {
     const response = await axios
@@ -23,20 +23,26 @@ const ProductDetail = () => {
       .catch((error) => {
         console.log(error);
       });
-    dispatch(selectedProducts(response.data));
+
+    const responseData = response.data;
+
+    dispatch(selectedProducts(responseData));
   };
 
   useEffect(() => {
+    // console.log(productId);
+
     if (productId && productId !== "") fetchProductDetail();
+
     return () => {
       dispatch(removeSelectedProduct());
     };
   }, [productId]);
 
-  const handleAddCart = () =>
-  {
+  const handleAddCart = () => {
     dispatch(addToCartAction(product));
-  }
+    props.history.push("/cartlist");
+  };
 
   return (
     <div className="ui grid container">
@@ -57,12 +63,17 @@ const ProductDetail = () => {
                 </h2>
                 <h3 className="ui brown block header">{category}</h3>
                 <p>{description}</p>
-                <div className="ui horizontal animated button" tabIndex="0">
+                {/* <div className="ui horizontal animated button" tabIndex="0">
                   <div className="hidden content">
                     <i className="shop icon"></i>
-                  </div>
-                  <div className="visible content" onClick={handleAddCart}>Add to Cart</div>
-                </div>
+                  </div> */}
+                <button
+                  className="ui positive basic button"
+                  onClick={handleAddCart}
+                >
+                  Add to Cart
+                </button>
+                {/* </div> */}
               </div>
             </div>
           </div>
@@ -72,4 +83,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default withRouter(ProductDetail);

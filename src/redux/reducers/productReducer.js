@@ -32,7 +32,10 @@ export const selectedProductReducer = (
 export const cartReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case ActionTypes.ADD_TO_CART:
-      return [...state.cartItems, payload];
+      return {
+        ...state,
+        cartItems: [...state.cartItems, payload],
+      };
     default:
       return state;
   }
